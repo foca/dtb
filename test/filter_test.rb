@@ -136,4 +136,18 @@ class DTB::FilterTest < MiniTest::Test
     assert_match(/translation missing/, filter.label)
     assert_equal "", filter.placeholder
   end
+
+  def test_labels_default_to_global_scope_if_the_context_doesnt_provide_label
+    I18n.backend.store_translations(I18n.locale, {
+      filters: {
+        foo: "Global Foo"
+      }
+    })
+
+    context = EvaluationContext.new
+
+    filter = DTB::Filter.new(:foo, value: nil, context: context)
+    assert_equal "Global Foo", filter.label
+    assert_equal "", filter.placeholder
+  end
 end

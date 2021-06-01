@@ -36,7 +36,7 @@ module DTB
           .map { |klass| :"#{scope}.#{klass.model_name.i18n_key}.#{name}" })
       end
 
-      defaults << "#{namespace}.#{name}" << default
+      defaults << :"#{namespace}.#{name}" << default
 
       I18n.translate(defaults.shift, default: defaults)
     end
