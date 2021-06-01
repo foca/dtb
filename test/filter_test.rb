@@ -3,6 +3,11 @@
 require "test_helper"
 
 class DTB::FilterTest < MiniTest::Test
+  def setup
+    I18n.backend.translations.clear
+    super
+  end
+
   def test_requires_a_value
     err = assert_raises DTB::MissingOptionsError do
       DTB::Filter.new(:foo) { |scope, val| scope + val }

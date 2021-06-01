@@ -3,6 +3,11 @@
 require "test_helper"
 
 class DTB::ColumnTest < MiniTest::Test
+  def setup
+    I18n.backend.translations.clear
+    super
+  end
+
   def test_modifies_query_by_default
     col = DTB::Column.new(:value) { |scope| scope + 1 }
 
