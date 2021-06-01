@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require "active_model/naming"
+require "active_model/translation"
 require "active_support/concern"
 require_relative "column"
 require_relative "has_options"
