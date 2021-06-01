@@ -9,15 +9,17 @@ module DTB
   class QueryBuilder
     include HasOptions
 
+    option :context, default: nil
+
     IDENT = ->(value) { value }
 
     attr_reader :name
 
-    def initialize(name, context: nil, **opts, &query)
-      super(**opts)
+    def initialize(name, opts = {}, &query)
+      super(opts)
+      @context = options[:context]
       @name = name
       @query = query
-      @context = context
     end
 
     def call(scope)

@@ -30,7 +30,7 @@ module DTB
       end
     end
 
-    def initialize(**opts)
+    def initialize(opts = {})
       self.options = HasOptions.validate(options.merge(opts), valid: valid_options, required: required_options)
       options.freeze
     end

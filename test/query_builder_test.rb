@@ -20,10 +20,4 @@ class DTB::QueryBuilderTest < MiniTest::Test
     assert_equal 3, builder.call(1)
     assert_equal 4, builder.call(2)
   end
-
-  def test_has_options
-    builder = DTB::QueryBuilder.new(:name) { |val| val + 1 }
-    assert_empty builder.options
-    assert_empty builder.valid_options
-  end
 end

@@ -63,8 +63,8 @@ module DTB
       @filters_reset_url ||= override_query_params(options[:filters_param] => nil)
     end
 
-    def initialize(params = {}, **opts)
-      super(**opts)
+    def initialize(params = {}, opts = {})
+      super(opts)
       @params = params
     end
 

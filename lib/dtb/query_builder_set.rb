@@ -9,8 +9,8 @@ module DTB
 
     delegate :each, to: :@builders
 
-    def initialize(builders = [], **opts)
-      super(**opts)
+    def initialize(builders = [], opts = {})
+      super(opts)
       @builders = builders
     end
 
