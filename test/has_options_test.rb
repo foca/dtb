@@ -47,8 +47,8 @@ class DTB::HasOptionsTest < MiniTest::Test
       option :baz
     end
 
-    refute_includes TestClass.valid_options, :baz
-    assert_includes sub_class.valid_options, :baz
+    refute_includes TestClass.options.valid_keys, :baz
+    assert_includes sub_class.options.valid_keys, :baz
   end
 
   def test_initializer_validates_options_are_defined

@@ -63,10 +63,4 @@ class DTB::QueryBuilderSetTest < MiniTest::Test
     assert_nil slice[:one]
     assert_nil slice[:two]
   end
-
-  def test_has_options
-    builder = DTB::QueryBuilderSet.new([])
-    assert_empty builder.options
-    assert_empty builder.valid_options
-  end
 end
