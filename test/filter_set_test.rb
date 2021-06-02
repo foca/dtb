@@ -7,7 +7,7 @@ class DTB::FilterSetTest < MiniTest::Test
     filters = DTB::FilterSet.new([])
     assert_equal :filters, filters.namespace
 
-    overridden = DTB::FilterSet.new([], param_name: :f)
+    overridden = DTB::FilterSet.new([], param: :f)
     assert_equal :f, overridden.namespace
   end
 

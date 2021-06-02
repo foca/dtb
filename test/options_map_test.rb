@@ -77,4 +77,21 @@ class DTB::OptionsMapTest < MiniTest::Test
     assert_equal Set.new([:foo]), err.required_options
     assert_equal Set.new([:foo]), err.missing_options
   end
+
+  def test_enforces_nested_validity
+    nested = DTB::OptionsMap.new
+    nested.define!(:foo, required: true)
+    nested.define!(:bar)
+
+    options = DTB::OptionsMap.new
+    options.nest!(:inner, nested)
+
+    options.update(inner: {bar: true})
+
+    err = assert_raises DTB::MissingOptionsError do
+      options.validate!
+    end
+
+    assert_match(/foo/, err.message)
+  end
 end

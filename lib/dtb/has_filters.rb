@@ -21,8 +21,7 @@ module DTB
     included do
       extend ActiveModel::Translation
 
-      option :filters_param, default: :filters
-      option :filters_partial
+      nested_options :filters, FilterSet.options
       option :default_params, default: {}
     end
 
@@ -41,26 +40,24 @@ module DTB
     def filters
       return @filters if defined?(@filters)
 
-      namespace = options[:filters_param]
-      values = params.fetch(namespace, options[:default_params])
+      values = params.fetch(options[:filters][:param], options[:default_params])
 
       filters = self.class.filter_definitions.map do |dfn|
         name = dfn[:name]
         dfn[:type].new(name, value: values[name], context: self, **dfn[:options], &dfn[:query])
       end
 
-      filter_options = {
-        param_name: namespace,
-        partial: options[:filters_partial],
-        submit_url: url,
-        reset_url: reset_url
-      }
+      filter_options = {submit_url: url, reset_url: reset_url}
+        .merge(options[:filters])
+        .compact
 
-      @filters = FilterSet.new(filters, **filter_options.compact)
+      @filters = FilterSet.new(filters, filter_options)
     end
 
     def reset_url
-      @filters_reset_url ||= override_query_params(options[:filters_param] => nil)
+      @filters_reset_url ||= override_query_params(
+        options[:filters][:param] => nil
+      )
     end
 
     def initialize(params = {}, opts = {})

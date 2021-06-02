@@ -4,13 +4,13 @@ require_relative "query_builder_set"
 
 module DTB
   class FilterSet < QueryBuilderSet
-    option :param_name, default: :filters, required: true
+    option :param, default: :filters, required: true
     option :partial, default: "filters/filters", required: true
     option :submit_url
     option :reset_url
 
     def namespace
-      options[:param_name]
+      options[:param]
     end
 
     def to_partial_path

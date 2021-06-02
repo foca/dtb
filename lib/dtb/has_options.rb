@@ -19,6 +19,10 @@ module DTB
       def option(name, default: OptionsMap::UNSET_OPTION, required: false)
         self.options = options.define(name, default: default, required: required)
       end
+
+      def nested_options(name, opts = OptionsMap.new)
+        self.options = options.nest(name, opts)
+      end
     end
 
     def initialize(opts = {})

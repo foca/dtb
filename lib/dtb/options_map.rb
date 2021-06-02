@@ -12,6 +12,7 @@ module DTB
       super
       @valid_keys = Set.new
       @required_keys = Set.new
+      @nested_options = {}
     end
 
     def initialize_copy(other)
@@ -31,13 +32,25 @@ module DTB
       self
     end
 
-    def validate!
-      if (keys.to_set - valid_keys).any?
-        fail UnknownOptionsError.new(self, valid_keys)
-      end
+    def nest(name, options = self.class.new)
+      deep_dup.nest!(name, options)
+    end
 
-      if (required_keys & keys) != required_keys
-        fail MissingOptionsError.new(self, required_keys)
+    def nest!(name, options = self.class.new)
+      valid_keys << name
+      @nested_options[name] = options
+      self[name] = options
+      self
+    end
+
+    def validate!
+      fail UnknownOptionsError.new(self) if (keys.to_set - valid_keys).any?
+      fail MissingOptionsError.new(self) if (required_keys & keys) != required_keys
+
+      @nested_options.each do |key, schema|
+        options = self[key]
+        options = schema.merge(self[key]) unless options.respond_to?(:validate!)
+        options.validate!
       end
 
       self

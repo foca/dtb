@@ -14,11 +14,11 @@ module DTB
     attr_reader :valid_options
     attr_reader :unknown_options
 
-    def initialize(options, valid_options)
-      unknown = options.keys.to_set - valid_options
-      super(format(MESSAGE, unknown.to_a, valid_options.to_a))
+    def initialize(options)
+      unknown = options.keys.to_set - options.valid_keys
+      super(format(MESSAGE, unknown.to_a, options.valid_keys.to_a))
       @options = options
-      @valid_options = valid_options
+      @valid_options = options.valid_keys
       @unknown_options = unknown
     end
 
@@ -32,11 +32,11 @@ module DTB
     attr_reader :required_options
     attr_reader :missing_options
 
-    def initialize(options, required_options)
-      missing = required_options - options.keys
-      super(format(MESSAGE, missing.to_a, options.to_a))
+    def initialize(options)
+      missing = options.required_keys - options.keys
+      super(format(MESSAGE, missing.to_a, options))
       @options = options
-      @required_options = required_options
+      @required_options = options.required_keys
       @missing_options = missing
     end
 

@@ -71,7 +71,7 @@ class DTB::HasFiltersTest < MiniTest::Test
 
   def test_overrides_param_namespace_via_options
     params = {f: {foo: "foo"}}
-    object = TestClass.new(params, filters_param: :f)
+    object = TestClass.new(params, filters: {param: :f})
 
     assert_equal "foo", object.filters[:foo].value
   end
@@ -95,7 +95,7 @@ class DTB::HasFiltersTest < MiniTest::Test
     object = TestClass.new({})
     assert_equal "filters/filters", object.filters.to_partial_path
 
-    overridden = TestClass.new({}, filters_partial: "filters/horizontal")
+    overridden = TestClass.new({}, filters: {partial: "filters/horizontal"})
     assert_equal "filters/horizontal", overridden.filters.to_partial_path
   end
 
@@ -125,5 +125,18 @@ class DTB::HasFiltersTest < MiniTest::Test
     object = TestClass.new(params)
 
     assert_equal [:bar_default, "qux", "internal state"], object.run
+  end
+
+  def test_can_override_reset_and_submit_url
+    params = {filters: {foo: "test"}, other: "param"}
+    base_url = "/list?filters%5Bfoo%5D=test&other=param"
+
+    object = TestClass.new(params, url: base_url, filters: {
+      reset_url: "/reset",
+      submit_url: "/submit"
+    })
+
+    assert_equal "/reset", object.filters.reset_url
+    assert_equal "/submit", object.filters.submit_url
   end
 end
