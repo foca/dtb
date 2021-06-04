@@ -17,7 +17,6 @@ module DTB
 
     def initialize(name, opts = {}, &query)
       super(opts)
-      @context = options[:context]
       @name = name
       @query = query
     end
@@ -34,13 +33,13 @@ module DTB
       options[:context].instance_exec(*args, &with)
     end
 
-    private def i18n_lookup(namespace, default: nil)
+    def i18n_lookup(namespace, default: nil)
       defaults = []
 
-      if @context.class.is_a?(ActiveModel::Translation)
-        scope = "#{@context.class.i18n_scope}.#{namespace}"
+      if options[:context].class.is_a?(ActiveModel::Translation)
+        scope = "#{options[:context].class.i18n_scope}.#{namespace}"
 
-        defaults.concat(@context.class.lookup_ancestors
+        defaults.concat(options[:context].class.lookup_ancestors
           .map { |klass| :"#{scope}.#{klass.model_name.i18n_key}.#{name}" })
       end
 
