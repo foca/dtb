@@ -41,6 +41,19 @@ class DTB::OptionsMapTest < MiniTest::Test
     assert_equal Set.new([:foo]), options_3.required_keys
   end
 
+  def test_nest_creates_copies
+    options_1 = DTB::OptionsMap.new
+    options_1.define!(:foo, default: 1)
+
+    options_2 = DTB::OptionsMap.new
+    options_2.nest!(:inner, options_1)
+
+    options_1[:foo] = 2
+
+    assert_equal 2, options_1[:foo]
+    assert_equal 1, options_2[:inner][:foo]
+  end
+
   def test_enforces_valid_keys
     options = DTB::OptionsMap.new
     options.define!(:foo)

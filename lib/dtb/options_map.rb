@@ -39,7 +39,7 @@ module DTB
     def nest!(name, options = self.class.new)
       valid_keys << name
       @nested_options[name] = options
-      self[name] = options
+      self[name] = options.deep_dup
       self
     end
 
