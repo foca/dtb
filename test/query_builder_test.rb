@@ -34,10 +34,12 @@ class DTB::QueryBuilderTest < MiniTest::Test
   def test_evaluates_when_unless_condition_is_false
     off = DTB::QueryBuilder.new(:test, unless: -> { true }) { |scope| scope + 1 }
     refute off.evaluate?
+    refute off.render?
     assert_equal 3, off.call(3)
 
     on = DTB::QueryBuilder.new(:test, unless: -> { false }) { |scope| scope + 1 }
     assert on.evaluate?
+    assert on.render?
     assert_equal 4, on.call(3)
   end
 
@@ -51,6 +53,7 @@ class DTB::QueryBuilderTest < MiniTest::Test
     end
 
     assert builder.evaluate?
+    assert builder.render?
     assert_equal 3, builder.call(2)
   end
 
@@ -62,6 +65,7 @@ class DTB::QueryBuilderTest < MiniTest::Test
     end
 
     refute builder.evaluate?
+    refute builder.render?
     assert_equal 2, builder.call(2)
   end
 end

@@ -18,12 +18,18 @@ class DTB::FilterTest < MiniTest::Test
 
   def test_modifies_query_if_given_a_present_value
     filter = DTB::Filter.new(:foo, value: 1) { |scope, val| scope + val }
+
+    assert filter.evaluate?
+    assert filter.render?
     assert_equal 2, filter.call(1)
     assert_equal 1, filter.value
   end
 
   def test_doesnt_modify_query_if_given_a_blank_value
     filter = DTB::Filter.new(:foo, value: nil) { |scope, val| scope + val }
+
+    refute filter.evaluate?
+    assert filter.render?
     assert_equal 1, filter.call(1)
     assert_nil filter.value
   end

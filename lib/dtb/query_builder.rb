@@ -27,12 +27,16 @@ module DTB
       evaluate? ? evaluate(scope, *args) : scope
     end
 
-    def evaluate?
-      evaluate(with: options[:if]) && !evaluate(with: options[:unless])
-    end
-
     def evaluate(*args, with: @query)
       options[:context].instance_exec(*args, &with)
+    end
+
+    def evaluate?
+      render?
+    end
+
+    def render?
+      evaluate(with: options[:if]) && !evaluate(with: options[:unless])
     end
 
     def i18n_lookup(namespace, default: nil)

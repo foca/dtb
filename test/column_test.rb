@@ -11,6 +11,8 @@ class DTB::ColumnTest < MiniTest::Test
   def test_modifies_query_by_default
     col = DTB::Column.new(:value) { |scope| scope + 1 }
 
+    assert col.evaluate?
+    assert col.render?
     assert_equal true, col.options[:database]
     assert_equal 1, col.call(0)
   end
@@ -18,6 +20,8 @@ class DTB::ColumnTest < MiniTest::Test
   def test_can_skip_query_if_not_database
     col = DTB::Column.new(:actions, database: false) { |scope| scope + 1 }
 
+    refute col.evaluate?
+    assert col.render?
     assert_equal false, col.options[:database]
     assert_equal 0, col.call(0)
   end
