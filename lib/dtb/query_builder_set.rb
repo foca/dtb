@@ -7,7 +7,7 @@ module DTB
   class QueryBuilderSet
     include HasOptions
 
-    delegate :each, to: :@builders
+    delegate :each, :to_a, to: :@builders
 
     def initialize(builders = [], opts = {})
       super(opts)
@@ -16,6 +16,10 @@ module DTB
 
     def call(scope)
       @builders.reduce(scope) { |current, builder| builder.call(current) }
+    end
+
+    def renderable
+      self.class.new(@builders.select { |builder| builder.render? }, options)
     end
 
     def [](name)
@@ -27,14 +31,14 @@ module DTB
         names.any? { |name| name.to_s == builder.name.to_s }
       end
 
-      self.class.new(builders)
+      self.class.new(builders, options)
     end
 
     def except(*names)
       builders = @builders.reject do |builder|
         names.any? { |name| name.to_s == builder.name.to_s }
       end
-      self.class.new(builders)
+      self.class.new(builders, options)
     end
   end
 end

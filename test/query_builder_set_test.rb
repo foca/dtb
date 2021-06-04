@@ -63,4 +63,16 @@ class DTB::QueryBuilderSetTest < MiniTest::Test
     assert_nil slice[:one]
     assert_nil slice[:two]
   end
+
+  def test_can_get_only_those_that_are_renderable
+    builder_1 = OpenStruct.new(render?: true)
+    builder_2 = OpenStruct.new(render?: false)
+    builder_3 = OpenStruct.new(render?: true)
+
+    set = DTB::QueryBuilderSet.new([builder_1, builder_2, builder_3])
+
+    assert_includes set.renderable.to_a, builder_1
+    assert_includes set.renderable.to_a, builder_3
+    refute_includes set.renderable.to_a, builder_2
+  end
 end
