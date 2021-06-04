@@ -60,8 +60,8 @@ module DTB
       )
     end
 
-    def initialize(params = {}, opts = {})
-      super(opts)
+    def initialize(params = {}, *args, &block)
+      super(*args, &block)
       @params = params
     end
 

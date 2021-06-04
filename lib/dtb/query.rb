@@ -15,8 +15,8 @@ module DTB
     include HasFilters
     include HasUrl
 
-    def self.run(*args, **opts)
-      new(*args, **opts).run
+    def self.run(*args)
+      new(*args).run
     end
   end
 end
