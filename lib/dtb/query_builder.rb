@@ -22,8 +22,16 @@ module DTB
       @query = query
     end
 
-    def call(scope)
-      @context.instance_exec(scope, &@query)
+    def call(scope, *args)
+      evaluate? ? evaluate(scope, *args) : scope
+    end
+
+    def evaluate?
+      true
+    end
+
+    def evaluate(*args, with: @query)
+      options[:context].instance_exec(*args, &with)
     end
 
     private def i18n_lookup(namespace, default: nil)

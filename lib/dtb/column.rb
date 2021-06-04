@@ -13,12 +13,12 @@ module DTB
     # end of each row, or a checkbox at the stard.
     option :database, default: true, required: true
 
-    def call(scope)
-      options[:database] ? super : scope
-    end
-
     def header
       i18n_lookup(:columns, default: "")
+    end
+
+    def evaluate?
+      options[:database] && super
     end
   end
 end

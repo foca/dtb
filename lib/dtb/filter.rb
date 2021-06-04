@@ -15,7 +15,7 @@ module DTB
     option :partial
 
     def call(scope)
-      value.present? ? @context.instance_exec(scope, value, &@query) : scope
+      super(scope, value)
     end
 
     def value
@@ -32,6 +32,10 @@ module DTB
 
     def to_partial_path
       options.fetch(:partial, "filters/#{self.class.name.underscore}")
+    end
+
+    def evaluate?
+      value.present? && super
     end
 
     private def sanitized_value
