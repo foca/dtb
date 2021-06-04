@@ -20,4 +20,48 @@ class DTB::QueryBuilderTest < MiniTest::Test
     assert_equal 3, builder.call(1)
     assert_equal 4, builder.call(2)
   end
+
+  def test_evaluates_when_if_condition_is_true
+    off = DTB::QueryBuilder.new(:test, if: -> { false }) { |scope| scope + 1 }
+    refute off.evaluate?
+    assert_equal 3, off.call(3)
+
+    on = DTB::QueryBuilder.new(:test, if: -> { true }) { |scope| scope + 1 }
+    assert on.evaluate?
+    assert_equal 4, on.call(3)
+  end
+
+  def test_evaluates_when_unless_condition_is_false
+    off = DTB::QueryBuilder.new(:test, unless: -> { true }) { |scope| scope + 1 }
+    refute off.evaluate?
+    assert_equal 3, off.call(3)
+
+    on = DTB::QueryBuilder.new(:test, unless: -> { false }) { |scope| scope + 1 }
+    assert on.evaluate?
+    assert_equal 4, on.call(3)
+  end
+
+  TestContext = Struct.new(:enabled, keyword_init: true)
+
+  def test_if_evaluates_in_context
+    context = TestContext.new(enabled: true)
+
+    builder = DTB::QueryBuilder.new(:test, context: context, if: -> { enabled }) do |scope|
+      scope + 1
+    end
+
+    assert builder.evaluate?
+    assert_equal 3, builder.call(2)
+  end
+
+  def test_unless_evaluates_in_context
+    context = TestContext.new(enabled: true)
+
+    builder = DTB::QueryBuilder.new(:test, context: context, unless: -> { enabled }) do |scope|
+      scope + 1
+    end
+
+    refute builder.evaluate?
+    assert_equal 2, builder.call(2)
+  end
 end

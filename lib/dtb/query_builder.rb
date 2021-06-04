@@ -10,6 +10,8 @@ module DTB
     include HasOptions
 
     option :context, default: nil
+    option :if, default: -> { true }
+    option :unless, default: -> { false }
 
     IDENT = ->(value) { value }
 
@@ -26,7 +28,7 @@ module DTB
     end
 
     def evaluate?
-      true
+      evaluate(with: options[:if]) && !evaluate(with: options[:unless])
     end
 
     def evaluate(*args, with: @query)
