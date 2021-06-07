@@ -15,8 +15,12 @@ module DTB
       i18n_lookup(:title, :empty_states, context: options[:context])
     end
 
-    def subtitle
-      i18n_lookup(:subtitle, :empty_states, context: options[:context], default: "")
+    def explanation
+      i18n_lookup(:explanation, :empty_states, context: options[:context], default: "")
+    end
+
+    def update_filters
+      i18n_lookup(:update_filters, :empty_states, context: options[:context], default: "")
     end
 
     def to_partial_path
