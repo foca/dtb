@@ -7,7 +7,7 @@ module DTB
   class QueryBuilderSet
     include HasOptions
 
-    delegate :each, :to_a, to: :@builders
+    delegate :each, :to_a, :any?, :empty?, to: :@builders
 
     def initialize(builders = [], opts = {})
       super(opts)

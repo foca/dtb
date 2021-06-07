@@ -75,4 +75,19 @@ class DTB::QueryBuilderSetTest < MiniTest::Test
     assert_includes set.renderable.to_a, builder_3
     refute_includes set.renderable.to_a, builder_2
   end
+
+  def test_can_use_basic_enumerable_methods
+    empty_set = DTB::QueryBuilderSet.new
+
+    assert empty_set.empty?
+    refute empty_set.any?
+    assert_equal [], empty_set.to_a
+
+    builder_1 = OpenStruct.new
+    non_empty_set = DTB::QueryBuilderSet.new([builder_1])
+
+    refute non_empty_set.empty?
+    assert non_empty_set.any?
+    assert_equal [builder_1], non_empty_set.to_a
+  end
 end
