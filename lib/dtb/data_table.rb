@@ -25,6 +25,10 @@ module DTB
       @options = options
     end
 
+    def filtered?
+      @filtered ||= filters.applied.any?
+    end
+
     NO_COLUMNS = QueryBuilderSet.new
     private_constant :NO_COLUMNS
 

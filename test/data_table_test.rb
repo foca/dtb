@@ -29,4 +29,12 @@ class DTB::DataTableTest < MiniTest::Test
     assert_kind_of DTB::QueryBuilderSet, table.columns
     assert_equal({}, table.options)
   end
+
+  def test_data_table_knows_if_any_filter_applied
+    unfiltered_table = DTB::DataTable.build(TestQuery, {}, url: "/list")
+    refute unfiltered_table.filtered?
+
+    filtered_table = DTB::DataTable.build(TestQuery, {filters: {foo: 1}}, url: "/list")
+    assert filtered_table.filtered?
+  end
 end
