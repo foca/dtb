@@ -49,6 +49,14 @@ class DTB::FilterTest < MiniTest::Test
     refute filter.applied?
   end
 
+  def test_modifies_query_but_isnt_considered_applied_if_given_default_value
+    filter = DTB::Filter.new(:foo, default: 1, value: nil) { |scope, val| scope + val }
+
+    assert_equal 2, filter.call(1)
+    assert_equal 1, filter.value
+    refute filter.applied?
+  end
+
   def test_relies_on_given_default_if_value_is_blank
     filter = DTB::Filter.new(:foo, value: nil, default: 1) { |scope, val| scope + val }
     assert_equal 3, filter.call(2)
