@@ -21,14 +21,24 @@ module DTB
       super(opts)
       @name = name
       @query = query
+      @applied = false
     end
 
     def call(scope, *args)
-      evaluate? ? evaluate(scope, *args) : scope
+      if evaluate?
+        @applied = true
+        evaluate(scope, *args)
+      else
+        scope
+      end
     end
 
     def evaluate(*args, with: @query)
       options[:context].instance_exec(*args, &with)
+    end
+
+    def applied?
+      @applied
     end
 
     def evaluate?

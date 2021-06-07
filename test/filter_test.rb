@@ -23,6 +23,7 @@ class DTB::FilterTest < MiniTest::Test
     assert filter.render?
     assert_equal 2, filter.call(1)
     assert_equal 1, filter.value
+    assert filter.applied?
   end
 
   def test_doesnt_modify_query_if_given_a_blank_value
@@ -32,6 +33,7 @@ class DTB::FilterTest < MiniTest::Test
     assert filter.render?
     assert_equal 1, filter.call(1)
     assert_nil filter.value
+    refute filter.applied?
   end
 
   def test_can_sanitize_values
@@ -44,6 +46,7 @@ class DTB::FilterTest < MiniTest::Test
     filter = DTB::Filter.new(:foo, sanitize: ->(val) { val.chop }, value: "x") { |scope, val| scope + val }
     assert_equal "y", filter.call("y")
     assert_nil filter.value
+    refute filter.applied?
   end
 
   def test_relies_on_given_default_if_value_is_blank

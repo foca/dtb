@@ -90,4 +90,32 @@ class DTB::QueryBuilderSetTest < MiniTest::Test
     assert non_empty_set.any?
     assert_equal [builder_1], non_empty_set.to_a
   end
+
+  def test_can_get_only_builders_that_have_been_applied
+    builder_1 = OpenStruct.new(applied?: true)
+    builder_2 = OpenStruct.new(applied?: false)
+    builder_3 = OpenStruct.new(applied?: true)
+
+    set = DTB::QueryBuilderSet.new([builder_1, builder_2, builder_3])
+
+    assert_includes set.applied.to_a, builder_1
+    assert_includes set.applied.to_a, builder_3
+    refute_includes set.applied.to_a, builder_2
+  end
+
+  def test_applying_the_set_tracks_which_builders_were_applied
+    builder_1 = DTB::QueryBuilder.new(:one) { |val| val + 1 }
+    builder_2 = DTB::QueryBuilder.new(:two) { |val| val + 2 }
+    builder_3 = DTB::QueryBuilder.new(:three) { |val| val + 3 }
+
+    set = DTB::QueryBuilderSet.new([builder_1, builder_2, builder_3])
+
+    builder_2.stub :evaluate?, false do
+      assert_equal 9, set.call(5) # 5 + 1 + 3, doesn't add 2
+
+      assert_includes set.applied.to_a, builder_1
+      assert_includes set.applied.to_a, builder_3
+      refute_includes set.applied.to_a, builder_2
+    end
+  end
 end

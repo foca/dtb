@@ -22,6 +22,10 @@ module DTB
       self.class.new(@builders.select { |builder| builder.render? }, options)
     end
 
+    def applied
+      self.class.new(@builders.select { |builder| builder.applied? }, options)
+    end
+
     def [](name)
       @builders.find { |builder| builder.name.to_s == name.to_s }
     end
