@@ -34,7 +34,7 @@ class DTB::HasEmptyStateTest < MiniTest::Test
   def test_subtitle_and_filtered_subtitle_are_optional
     target = NotAnActiveModelTranslation.new
 
-    assert_match /translation missing/, target.empty_state.title
+    assert_match(/translation missing/, target.empty_state.title)
     assert_empty target.empty_state.explanation
     assert_empty target.empty_state.update_filters
   end
