@@ -15,10 +15,11 @@ module DTB
     option :partial
 
     def call(scope)
-      super(scope, value)
+      super(scope, value).tap do
         # We only want to consider this filter applied if it has a _custom_
         # value set, not if it's just using the default value.
-        .tap { @applied = false if @applied && sanitized_value.blank? }
+        @applied = false if @applied && sanitized_value.blank?
+      end
     end
 
     def value
