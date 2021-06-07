@@ -30,6 +30,7 @@ class DTB::QueryTest < MiniTest::Test
       rows: expected_result,
       filters: query.filters,
       columns: query.columns,
+      empty_state: query.empty_state,
       options: query.options
     }
 

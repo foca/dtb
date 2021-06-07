@@ -1,13 +1,12 @@
 # frozen_string_literal: true
 
-require "active_model/naming"
-require "active_model/translation"
-require "i18n"
+require_relative "has_i18n"
 require_relative "has_options"
 
 module DTB
   class QueryBuilder
     include HasOptions
+    include HasI18n
 
     option :context, default: nil
     option :if, default: -> { true }
@@ -50,18 +49,7 @@ module DTB
     end
 
     def i18n_lookup(namespace, default: nil)
-      defaults = []
-
-      if options[:context].class.is_a?(ActiveModel::Translation)
-        scope = "#{options[:context].class.i18n_scope}.#{namespace}"
-
-        defaults.concat(options[:context].class.lookup_ancestors
-          .map { |klass| :"#{scope}.#{klass.model_name.i18n_key}.#{name}" })
-      end
-
-      defaults << :"#{namespace}.#{name}" << default
-
-      I18n.translate(defaults.shift, default: defaults)
+      super(name, namespace, default: default, context: options[:context])
     end
   end
 end

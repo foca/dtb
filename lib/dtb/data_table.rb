@@ -3,6 +3,7 @@
 require "active_support/core_ext/module/delegation"
 require_relative "filter_set"
 require_relative "query_builder_set"
+require_relative "empty_state"
 
 module DTB
   class DataTable
@@ -17,11 +18,19 @@ module DTB
     attr_reader :columns
     attr_reader :filters
     attr_reader :options
+    attr_reader :empty_state
 
-    def initialize(rows:, columns: NO_COLUMNS, filters: NO_FILTERS, options: {})
+    def initialize(
+      rows:,
+      columns: NO_COLUMNS,
+      filters: NO_FILTERS,
+      empty_state: DEFAULT_EMPTY_STATE,
+      options: {}
+    )
       @rows = rows
       @columns = columns
       @filters = filters
+      @empty_state = empty_state
       @options = options
     end
 
@@ -34,5 +43,8 @@ module DTB
 
     NO_FILTERS = FilterSet.new
     private_constant :NO_FILTERS
+
+    DEFAULT_EMPTY_STATE = EmptyState.new
+    private_constant :DEFAULT_EMPTY_STATE
   end
 end
