@@ -139,4 +139,30 @@ class DTB::HasFiltersTest < MiniTest::Test
     assert_equal "/reset", object.filters.reset_url
     assert_equal "/submit", object.filters.submit_url
   end
+
+  def test_default_query_builder
+    cls = Class.new do
+      include DTB::HasFilters
+      filter :test
+
+      def initialize(initial_scope, *args)
+        super(*args)
+        @initial_scope = initial_scope
+      end
+
+      def run
+        filters.call(@initial_scope)
+      end
+    end
+
+    mock = MiniTest::Mock.new
+    mock.expect(:where, mock, [{test: "test"}])
+    mock.expect(:tap, mock)
+
+    query = cls.new(mock, filters: {test: "test"})
+
+    result = query.run
+    assert_equal result.object_id, mock.object_id
+    assert mock.verify
+  end
 end

@@ -26,7 +26,7 @@ module DTB
     end
 
     class_methods do
-      def filter(name, query, type: Filter, **opts)
+      def filter(name, query = ->(scope, value) { scope.where(name => value) }, type: Filter, **opts)
         filter_definitions << {type: type, name: name, query: query, options: opts}
       end
 
