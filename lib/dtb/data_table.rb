@@ -7,9 +7,8 @@ require_relative "empty_state"
 
 module DTB
   class DataTable
-    def self.build(query_class, *args, **opts)
-      query = query_class.new(*args, **opts)
-      new(**query.to_data_table)
+    def self.build(query, *args, **opts)
+      new(**query.to_data_table(*args, **opts))
     end
 
     delegate :any?, :empty?, :each, to: :rows

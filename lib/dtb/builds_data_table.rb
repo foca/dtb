@@ -8,7 +8,13 @@ module DTB
     extend ActiveSupport::Concern
     include HasOptions
 
-    def to_data_table
+    class_methods do
+      def to_data_table(*args, **opts)
+        new(*args, **opts).to_data_table
+      end
+    end
+
+    def to_data_table(*)
       {rows: run, options: options}
     end
   end
