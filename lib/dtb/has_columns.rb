@@ -16,10 +16,12 @@ module DTB
 
     included do
       extend ActiveModel::Translation
+
+      option :default_column_type, default: Column
     end
 
     class_methods do
-      def column(name, query = ->(scope) { scope.select(name) }, type: Column, **opts)
+      def column(name, query = ->(scope) { scope.select(name) }, type: options[:default_column_type], **opts)
         column_definitions << {type: type, name: name, query: query, options: opts}
       end
 

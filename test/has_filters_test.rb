@@ -165,4 +165,18 @@ class DTB::HasFiltersTest < MiniTest::Test
     assert_equal result.object_id, mock.object_id
     assert mock.verify
   end
+
+  def test_can_change_default_filter_type
+    base_filter = Class.new(DTB::Filter)
+
+    cls = Class.new do
+      include DTB::HasFilters
+      options[:default_filter_type] = base_filter
+
+      filter :test
+    end
+
+    object = cls.new
+    assert_kind_of base_filter, object.filters[:test]
+  end
 end

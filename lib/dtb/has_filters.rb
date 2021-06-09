@@ -23,10 +23,11 @@ module DTB
 
       nested_options :filters, FilterSet.options
       option :default_params, default: {}
+      option :default_filter_type, default: Filter
     end
 
     class_methods do
-      def filter(name, query = ->(scope, value) { scope.where(name => value) }, type: Filter, **opts)
+      def filter(name, query = ->(scope, value) { scope.where(name => value) }, type: options[:default_filter_type], **opts)
         filter_definitions << {type: type, name: name, query: query, options: opts}
       end
 

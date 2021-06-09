@@ -74,4 +74,18 @@ class DTB::HasColumnsTest < MiniTest::Test
 
     scope.verify
   end
+
+  def test_can_change_default_column_type
+    base_column = Class.new(DTB::Column)
+
+    cls = Class.new do
+      include DTB::HasColumns
+      options[:default_column_type] = base_column
+
+      column :test
+    end
+
+    object = cls.new
+    assert_kind_of base_column, object.columns[:test]
+  end
 end
