@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "active_model/naming"
-require "active_model/translation"
 require "active_support/concern"
 require "i18n"
 
@@ -12,7 +10,7 @@ module DTB
     def i18n_lookup(name, namespace, default: nil, context: nil)
       defaults = []
 
-      if context.class.is_a?(ActiveModel::Translation)
+      if defined?(ActiveModel::Translation) && context.class.is_a?(ActiveModel::Translation)
         scope = "#{context.class.i18n_scope}.#{namespace}"
 
         defaults.concat(context.class.lookup_ancestors
