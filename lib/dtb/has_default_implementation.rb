@@ -14,9 +14,13 @@ module DTB
       end
     end
 
+    def default_scope
+      self.class.default_scope
+    end
+
     def run
-      if self.class.default_scope
-        instance_exec(&self.class.default_scope)
+      if default_scope
+        instance_exec(&default_scope)
       else
         fail DTB::NotImplementedError, <<~ERROR
           Either add a `default_scope` to your Query to apply all columns and
