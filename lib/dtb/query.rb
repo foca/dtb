@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require "active_model/translation"
+require "active_model/naming"
 require_relative "builds_data_table"
 require_relative "has_default_implementation"
 require_relative "has_options"
@@ -9,6 +11,7 @@ require_relative "has_empty_state"
 
 module DTB
   class Query
+    extend ActiveModel::Translation
     include HasDefaultImplementation
     include HasOptions
     include BuildsDataTable
@@ -16,6 +19,10 @@ module DTB
     include HasFilters
     include HasUrl
     include HasEmptyState
+
+    def self.i18n_scope
+      :queries
+    end
 
     def self.run(*args)
       new(*args).run

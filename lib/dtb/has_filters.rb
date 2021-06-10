@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 
 require "active_support/concern"
-require "active_model/translation"
-
 require_relative "builds_data_table"
 require_relative "filter"
 require_relative "filter_set"
@@ -19,8 +17,6 @@ module DTB
     include HasUrl
 
     included do
-      extend ActiveModel::Translation
-
       nested_options :filters, FilterSet.options
       option :default_params, default: {}
       option :default_filter_type, default: Filter
