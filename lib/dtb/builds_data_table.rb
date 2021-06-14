@@ -9,8 +9,8 @@ module DTB
     include HasOptions
 
     class_methods do
-      def to_data_table(*args, **opts)
-        new(*args, **opts).to_data_table
+      def to_data_table(*args)
+        new(*args).to_data_table
       end
     end
 
