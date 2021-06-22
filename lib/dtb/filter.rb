@@ -63,6 +63,12 @@ module DTB
   #     scope.where("created_at > ?", value.days.ago)
   #   end
   #
+  # If the given default is a Proc/lambda, it will be evaluated, and the return
+  # value of the Proc will be used as the default:
+  #
+  #   # the default value will be the current user's currency
+  #   filter = Filter.new(:currency, default: -> { Current.user.currency })
+  #
   # == Rendering filters
   #
   # Filters accept a +partial+ option that points to the partial used to render
@@ -96,8 +102,9 @@ module DTB
     option :sanitize, default: IDENT, required: true
 
     # @!attribute [rw] default
-    #   @return [Object, nil] a default value to use if the user supplies a
-    #     blank value.
+    #   @return [Object, Proc nil] a default value to use if the user supplies a
+    #     blank value. If given a Proc, it will be evaluated and its return
+    #     value used as the default.
     option :default
 
     # @!attribute [rw] partial
@@ -125,7 +132,7 @@ module DTB
     # applied. This can be a user supplied value (after sanitizing), or the
     # default value, if set.
     def value
-      sanitized_value.presence || options[:default]
+      sanitized_value.presence || default_value
     end
 
     # Determine the content of the +<label>+ tag that should be shown when
@@ -161,6 +168,14 @@ module DTB
     # @visibility private
     def evaluate?
       value.present? && super
+    end
+
+    private def default_value
+      if options[:default].respond_to?(:call)
+        evaluate(with: options[:default])
+      else
+        options[:default]
+      end
     end
 
     private def sanitized_value

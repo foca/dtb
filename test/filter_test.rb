@@ -63,6 +63,11 @@ class DTB::FilterTest < MiniTest::Test
     assert_equal 1, filter.value
   end
 
+  def test_default_value_can_be_a_proc
+    filter = DTB::Filter.new(:foo, value: nil, default: -> { "value" })
+    assert_equal "value", filter.value
+  end
+
   def test_determines_its_partial_path
     base_filter = DTB::Filter.new(:foo, value: 1)
     assert_equal "filters/dtb/filter", base_filter.to_partial_path
