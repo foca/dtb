@@ -54,12 +54,12 @@ module DTB
   # by default you want this to be "last week".
   #
   #   # if the user sends 30 (i.e. last 30 days), we will use that value.
-  #   filter = filter.new(:name, value: 30, default: 7) do |scope, value|
+  #   filter = Filter.new(:name, value: 30, default: 7) do |scope, value|
   #     scope.where("created_at > ?", value.days.ago)
   #   end
   #
-  #   # if the user doesn't set this filter, we will use 7 as teh default value.
-  #   filter = filter.new(:name, value: nil, default: 7) do |scope, value|
+  #   # if the user doesn't set this filter, we will use 7 as the default value.
+  #   filter = Filter.new(:name, value: nil, default: 7) do |scope, value|
   #     scope.where("created_at > ?", value.days.ago)
   #   end
   #
