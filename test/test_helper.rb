@@ -31,4 +31,6 @@ class TestQuery < DTB::Query
   filter :foo, ->(scope, val) { scope << [:filter, :foo, val] }
   filter :bar, ->(scope, val) { scope << [:filter, :bar, val] }
   filter :baz, ->(scope, val) { scope << [:filter, :baz, val] }
+
+  option :render_with, default: "data_table"
 end

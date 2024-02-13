@@ -95,24 +95,40 @@ module DTB
     # @param empty_state [EmptyState] the object to get information from if
     #   there are no rows. Defaults to an unconfigured {EmptyState}.
     # @param options [Hash] the options used to configure the query.
+    # @param renderable [Renderable, nil] the source of rendering options for this
+    #   data table. Normally, a Query object, or the same object that was used
+    #   to generate the {#rows}. If +nil+, calling {#renderer} will return +nil+.
     def initialize(
       rows:,
       columns: NO_COLUMNS,
       filters: NO_FILTERS,
       empty_state: DEFAULT_EMPTY_STATE,
-      options: {}
+      options: {},
+      renderable: nil
     )
       @rows = rows
       @columns = columns
       @filters = filters
       @empty_state = empty_state
       @options = options
+      @renderable = renderable
     end
 
     # @return [Boolean] whether any of the filters was applied to get the
     #   current results.
     def filtered?
       @filtered ||= filters.applied.any?
+    end
+
+    # (see Renderable#renderer)
+    def renderer(**opts)
+      opts = opts.merge(rendering_options)
+      @renderable&.renderer(**opts)
+    end
+
+    # (see Renderable#rendering_options)
+    def rendering_options
+      {data_table: self}
     end
 
     NO_COLUMNS = QueryBuilderSet.new

@@ -17,6 +17,11 @@ class DTB::DataTableTest < Minitest::Test
     assert_equal [[:column, :qux], [:column, :pow]], data_table.rows
 
     assert_equal TestQuery.options.merge(url: "/list"), data_table.options
+
+    assert_equal(
+      {partial: "data_table", locals: {data_table: data_table}},
+      data_table.renderer
+    )
   end
 
   def test_data_table_exposes_given_data

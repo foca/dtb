@@ -162,5 +162,10 @@ module DTB
       name = ActiveModel::Name.new(self.class).element.underscore.to_sym
       {name => self}
     end
+
+    # (see BuildsDataTable#to_data_table)
+    def to_data_table(*)
+      super.merge(renderable: self)
+    end
   end
 end

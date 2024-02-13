@@ -31,7 +31,8 @@ class DTB::QueryTest < Minitest::Test
       filters: query.filters,
       columns: query.columns,
       empty_state: query.empty_state,
-      options: query.options
+      options: query.options,
+      renderable: query
     }
 
     assert_equal expected_result, query.run

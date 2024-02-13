@@ -8,6 +8,7 @@ require_relative "has_options"
 require_relative "has_columns"
 require_relative "has_filters"
 require_relative "has_empty_state"
+require_relative "renderable"
 
 module DTB
   # Queries are the base classes that allow you to model both what data is
@@ -102,6 +103,7 @@ module DTB
     include HasFilters
     include HasUrl
     include HasEmptyState
+    include Renderable
 
     # Provide a base scope of +queries+ for translations. Unless overridde,
     # translations within query objects will be found under
@@ -136,5 +138,13 @@ module DTB
     # @!method to_data_table
     #   @return [Hash<Symbol, Object>] a Hash of arguments suitable to pass to
     #     {DataTable#initialize}
+
+    # (see Renderable#rendering_options)
+    def rendering_options
+      # NOTE: Normally this is exposed through a DataTable, and we don't want to
+      # expose query internals when rendering. You can always override this if
+      # you do want the Query instance available to the Renderer, though.
+      {}
+    end
   end
 end
