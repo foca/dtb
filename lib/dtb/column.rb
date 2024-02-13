@@ -44,7 +44,7 @@ module DTB
 
     # @!group Options
 
-    # @!method options[:database]
+    # @!attribute [rw] database
     #   Whether to affect the query or not. If this is false, this Column's
     #   {#call} method does nothing (just returns its input). This is useful for
     #   laying out purely presentational columns on data tables, such as actions
@@ -71,6 +71,12 @@ module DTB
     # @return [String]
     def header
       i18n_lookup(:columns, default: "")
+    end
+
+    # @return [Boolean] whether this column actually affects the query or not.
+    # @see #database
+    def database?
+      options[:database]
     end
 
     # @visibility private

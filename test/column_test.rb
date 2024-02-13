@@ -14,6 +14,7 @@ class DTB::ColumnTest < Minitest::Test
     assert col.evaluate?
     assert col.render?
     assert_equal true, col.options[:database]
+    assert col.database?
     assert_equal 1, col.call(0)
   end
 
@@ -23,6 +24,7 @@ class DTB::ColumnTest < Minitest::Test
     refute col.evaluate?
     assert col.render?
     assert_equal false, col.options[:database]
+    refute col.database?
     assert_equal 0, col.call(0)
   end
 
