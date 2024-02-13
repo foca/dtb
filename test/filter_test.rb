@@ -2,7 +2,7 @@
 
 require "test_helper"
 
-class DTB::FilterTest < MiniTest::Test
+class DTB::FilterTest < Minitest::Test
   def setup
     I18n.backend.translations.clear
     super
@@ -160,7 +160,7 @@ class DTB::FilterTest < MiniTest::Test
 
   def test_placeholders_default_to_empty
     filter = DTB::Filter.new(:bar, value: nil, context: nil)
-    assert_match(/translation missing/, filter.label)
+    assert_match(/translation missing/i, filter.label)
     assert_equal "", filter.placeholder
   end
 

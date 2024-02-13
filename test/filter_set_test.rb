@@ -2,7 +2,7 @@
 
 require "test_helper"
 
-class DTB::FilterSetTest < MiniTest::Test
+class DTB::FilterSetTest < Minitest::Test
   def test_provides_a_namespace_for_form_params
     filters = DTB::FilterSet.new([])
     assert_equal :filters, filters.namespace

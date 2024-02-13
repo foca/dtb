@@ -2,7 +2,7 @@
 
 require "test_helper"
 
-class DTB::DataTableTest < MiniTest::Test
+class DTB::DataTableTest < Minitest::Test
   def test_builds_data_table_from_query_class
     data_table = DTB::DataTable.build(TestQuery, {}, url: "/list")
 

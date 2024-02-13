@@ -2,7 +2,7 @@
 
 require "test_helper"
 
-class DTB::HasOptionsTest < MiniTest::Test
+class DTB::HasOptionsTest < Minitest::Test
   class TestClass
     include DTB::HasOptions
 

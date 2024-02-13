@@ -2,7 +2,7 @@
 
 require "test_helper"
 
-class DTB::QueryBuilderTest < MiniTest::Test
+class DTB::QueryBuilderTest < Minitest::Test
   def test_evaluates_query_on_scope
     builder = DTB::QueryBuilder.new(:test) { |scope| scope + 1 }
 

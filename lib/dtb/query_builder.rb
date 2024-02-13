@@ -68,7 +68,7 @@ module DTB
 
     # @param name [Symbol] The QueryBuilder's name.
     # @param opts [Hash] Any options that need to be set. See also {HasOptions}.
-    # @yield [scope, *args] The given block will be used by {#call} to modify
+    # @yield [scope, ...] The given block will be used by {#call} to modify
     #   the given input scope
     # @raise (see HasOptions#initialize)
     def initialize(name, opts = {}, &query)
@@ -82,15 +82,15 @@ module DTB
     # input +scope+ or the output of the Proc.
     #
     # @param scope [Object] the "query" being built.
-    # @param args [Array<Object>] Splat of any other params that are accepted by
+    # @param ... [Array<Object>] Splat of any other params that are accepted by
     #   this QueryBuilder's Proc.
     # @return [Object] the modified "query" or the input +scope+.
     #
     # @see #evaluate?
-    def call(scope, *args)
+    def call(scope, ...)
       if evaluate?
         @applied = true
-        evaluate(scope, *args)
+        evaluate(scope, ...)
       else
         scope
       end
@@ -99,11 +99,11 @@ module DTB
     # Evaluates a Proc in the context of this QueryBuilder's +context+, as given
     # in the options.
     #
-    # @param args [Array<Object>] Splat of any arguments needed by the Proc.
+    # @param args [Array<Object>] Any arguments will be forwarded to the Proc.
     # @param with [Proc] A Proc. Defaults to this QueryBuilder's main Proc.
     # @api private
-    def evaluate(*args, with: @query)
-      options[:context].instance_exec(*args, &with)
+    def evaluate(*args, with: @query, **opts)
+      options[:context].instance_exec(*args, **opts, &with)
     end
 
     # @return [Boolean] Whether this QueryBuilder's Proc has been used or not.

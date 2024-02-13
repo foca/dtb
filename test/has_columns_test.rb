@@ -2,7 +2,7 @@
 
 require "test_helper"
 
-class DTB::HasColumnsTest < MiniTest::Test
+class DTB::HasColumnsTest < Minitest::Test
   class TestClass
     include DTB::HasColumns
 
@@ -35,7 +35,7 @@ class DTB::HasColumnsTest < MiniTest::Test
   end
 
   def test_with_explicit_query_builder_block
-    scope = MiniTest::Mock.new
+    scope = Minitest::Mock.new
     scope.expect :select, scope, ["foo column"]
 
     object = TestClass.new
@@ -47,7 +47,7 @@ class DTB::HasColumnsTest < MiniTest::Test
   def test_with_default_query_builder_block
     # Default block is ->(scope) { scope.select(column_name) }
 
-    scope = MiniTest::Mock.new
+    scope = Minitest::Mock.new
     scope.expect :select, scope, [:bar]
 
     object = TestClass.new
@@ -57,7 +57,7 @@ class DTB::HasColumnsTest < MiniTest::Test
   end
 
   def test_presentational_columns_dont_modify_query
-    scope = MiniTest::Mock.new
+    scope = Minitest::Mock.new
 
     object = TestClass.new
     object.columns[:baz].call(scope)
@@ -66,7 +66,7 @@ class DTB::HasColumnsTest < MiniTest::Test
   end
 
   def test_with_access_to_query_internal_state
-    scope = MiniTest::Mock.new
+    scope = Minitest::Mock.new
     scope.expect :select, scope, ["some internal state"]
 
     object = TestClass.new

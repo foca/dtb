@@ -2,7 +2,7 @@
 
 require "test_helper"
 
-class DTB::HasFiltersTest < MiniTest::Test
+class DTB::HasFiltersTest < Minitest::Test
   class TestClass
     include DTB::HasFilters
 
@@ -155,8 +155,8 @@ class DTB::HasFiltersTest < MiniTest::Test
       end
     end
 
-    mock = MiniTest::Mock.new
-    mock.expect(:where, mock, [{test: "test"}])
+    mock = Minitest::Mock.new
+    mock.expect(:where, mock, test: "test")
     mock.expect(:tap, mock)
 
     query = cls.new(mock, filters: {test: "test"})

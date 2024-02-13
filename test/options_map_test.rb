@@ -2,7 +2,7 @@
 
 require "test_helper"
 
-class DTB::OptionsMapTest < MiniTest::Test
+class DTB::OptionsMapTest < Minitest::Test
   def test_can_define_valid_options
     options = DTB::OptionsMap.new
     options.define!(:foo)

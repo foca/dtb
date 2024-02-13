@@ -2,7 +2,7 @@
 
 require "test_helper"
 
-class DTB::HasUrlTest < MiniTest::Test
+class DTB::HasUrlTest < Minitest::Test
   class TestClass
     include DTB::HasUrl
     public :override_query_params

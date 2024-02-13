@@ -2,7 +2,7 @@
 
 require "test_helper"
 
-class DTB::HasDefaultImplementationTest < MiniTest::Test
+class DTB::HasDefaultImplementationTest < Minitest::Test
   class FailedQuery
     include DTB::HasDefaultImplementation
   end

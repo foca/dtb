@@ -2,7 +2,7 @@
 
 require "test_helper"
 
-class DTB::QueryBuilderSetTest < MiniTest::Test
+class DTB::QueryBuilderSetTest < Minitest::Test
   def test_evaluates_builders_in_sequence
     builder_1 = DTB::QueryBuilder.new(:one) { |val| val + 1 }
     builder_2 = DTB::QueryBuilder.new(:two) { |val| val * 2 }

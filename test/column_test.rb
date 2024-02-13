@@ -2,7 +2,7 @@
 
 require "test_helper"
 
-class DTB::ColumnTest < MiniTest::Test
+class DTB::ColumnTest < Minitest::Test
   def setup
     I18n.backend.translations.clear
     super

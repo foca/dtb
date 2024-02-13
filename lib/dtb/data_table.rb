@@ -53,14 +53,14 @@ module DTB
     #     been run yet.
     #   @return [Datatable] the data table with the results of running the query.
     #
-    # @overload build(object, *args)
+    # @overload build(object, ...)
     #   @param object [#to_data_table] an object that implements +#to_data_table+.
-    #   @param args [Array<Object>] any parameters that should be forwarded to
+    #   @param ... [Array<Object>] any parameters that should be forwarded to
     #     the +object+'s +#to_data_table+ method.
     #   @return [Datatable] the data table with the results of running the query.
     #   @see BuildsDataTable
-    def self.build(query, *args, **opts)
-      new(**query.to_data_table(*args, **opts))
+    def self.build(query, ...)
+      new(**query.to_data_table(...))
     end
 
     # @!method any?

@@ -2,7 +2,7 @@
 
 require "test_helper"
 
-class DTB::QueryTest < MiniTest::Test
+class DTB::QueryTest < Minitest::Test
   class TestQuery < DTB::Query
     default_scope { [] }
 

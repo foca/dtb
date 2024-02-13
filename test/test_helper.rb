@@ -4,6 +4,8 @@ $LOAD_PATH.unshift File.expand_path("../lib", __dir__)
 require "dtb"
 
 require "minitest/autorun"
+require "ostruct"
+require "debug"
 
 class EvaluationContext
   extend ActiveModel::Translation

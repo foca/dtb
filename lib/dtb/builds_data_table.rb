@@ -19,10 +19,10 @@ module DTB
     class_methods do
       # Instantiates this object and then calls #to_data_table
       #
-      # @param args any arguments will be forwarded to the constructor.
+      # @param ... any arguments will be forwarded to the constructor.
       # @return (see #to_data_table)
-      def to_data_table(*args)
-        new(*args).to_data_table
+      def to_data_table(...)
+        new(...).to_data_table
       end
     end
 

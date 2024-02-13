@@ -114,11 +114,11 @@ module DTB
 
     # Run the query, returning the results.
     #
-    # @param args [Array<Object>] Any arguments given will be forwarded to
+    # @param ... [Array<Object>] Any arguments given will be forwarded to
     #   #initialize
     # @return (see #run)
-    def self.run(*args)
-      new(*args).run
+    def self.run(...)
+      new(...).run
     end
 
     # @!method initialize(params = {}, options = {})
