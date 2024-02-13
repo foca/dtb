@@ -14,4 +14,4 @@ YARD::Rake::YardocTask.new
 
 require "standard/rake"
 
-task default: %i[test standard yard]
+task default: %i[test standard yard build]
