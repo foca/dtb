@@ -10,14 +10,12 @@ module DTB
   #
   # @example Configuring a default partial to render empty states
   #   class ApplicationQuery < DTB::Query
-  #     options[:empty_state][:partial] = "data_tables/empty_state"
+  #     options[:empty_state][:render_with] = "data_tables/empty_state"
   #   end
   #
   # @example Rendering the empty state of a data table
   #   <% if data_table.empty? %>
-  #     <%= render partial: data_table.empty_state,
-  #                as: :empty_state,
-  #                locals: { data_table: data_table } %>
+  #     <%= render data_table.empty_state.renderer(data_table: data_table) %>
   #   <% end %>
   #
   # @example A sample default empty state partial

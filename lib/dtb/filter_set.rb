@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require_relative "query_builder_set"
+require_relative "renderable"
 
 module DTB
   # Filter sets extend {QueryBuilderSet QueryBuilder sets} by adding a few
@@ -25,6 +26,8 @@ module DTB
   #   <% end %>
   #
   class FilterSet < QueryBuilderSet
+    include Renderable
+
     # @!group Options
 
     # @!attribute [rw] param
@@ -36,10 +39,8 @@ module DTB
     #   @see #namespace
     option :param, default: :filters, required: true
 
-    # @!attribute [rw] partial
-    #   @return [String] the partial to use to render the filters form. Defaults
-    #     to +"filters/filters"+.
-    option :partial, default: "filters/filters", required: true
+    # @!attribute [rw] renders_with (see Renderable#renders_with)
+    option :render_with, default: "filters/filters", required: true
 
     # @!attribute [rw] submit_url
     #   @return [String] the URL to submit the filters form to.
@@ -70,18 +71,16 @@ module DTB
       options[:param]
     end
 
-    # @return [String] the rails partial used to render this form.
-    # @see #partial
-    def to_partial_path
-      options[:partial]
-    end
-
     def submit_url
       options[:submit_url]
     end
 
     def reset_url
       options[:reset_url]
+    end
+
+    private def rendering_options
+      {filters: self}
     end
   end
 end

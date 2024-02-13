@@ -68,15 +68,27 @@ class DTB::FilterTest < Minitest::Test
     assert_equal "value", filter.value
   end
 
-  def test_determines_its_partial_path
+  def test_provides_a_default_rendering_mechanism
     base_filter = DTB::Filter.new(:foo, value: 1)
-    assert_equal "filters/dtb/filter", base_filter.to_partial_path
+    assert_equal(
+      {partial: "filters/dtb/filter", locals: {filter: base_filter}},
+      base_filter.renderer
+    )
 
     test_filter = TestFilter.new(:bar, value: 2)
-    assert_equal "filters/test_filter", test_filter.to_partial_path
+    assert_equal({partial: "filters/test_filter", locals: {filter: test_filter}}, test_filter.renderer)
 
-    override_filter = DTB::Filter.new(:foo, value: 1, partial: "filters/override")
-    assert_equal "filters/override", override_filter.to_partial_path
+    override_filter = DTB::Filter.new(:foo, {
+      value: 1,
+      render_with: ->(filter:) { {partial: "filters/override", locals: {filter: filter}} }
+    })
+    assert_equal({partial: "filters/override", locals: {filter: override_filter}}, override_filter.renderer)
+
+    component_class = Struct.new(:filter, keyword_init: true)
+    component_filter = DTB::Filter.new(:foo, value: 1, render_with: component_class)
+    renderable = component_filter.renderer
+    assert_instance_of component_class, renderable
+    assert_equal component_filter, renderable.filter
   end
 
   def test_defaults_to_root_i18n_keys_for_nil_contexts

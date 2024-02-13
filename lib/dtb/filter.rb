@@ -4,6 +4,7 @@ require "active_support/core_ext/object/blank"
 require "active_support/core_ext/string/inflections"
 require_relative "query_builder"
 require_relative "has_options"
+require_relative "renderable"
 
 module DTB
   # Filters allow setting conditions on a query, which are optionally applied
@@ -71,24 +72,70 @@ module DTB
   #
   # == Rendering filters
   #
-  # Filters accept a +partial+ option that points to the partial used to render
-  # them. This lets you render different widgets for each filter, where you can
-  # customize the form control used (i.e. a text field vs a number field vs a
-  # select box).
+  # To render a filter in the view, you can call its {#renderer} method, and
+  # pass the output to the +render+ helper:
   #
-  # When rendering, the filter object is passed to the partial, same as if you
-  # did:
+  #   <%= render filter.renderer %>
   #
-  #   render partial: "some_partial", locals: {filter: the_filter}
+  # To configure how that renderer behaves, Filters accept a +rendes_with+
+  # option that defines how they can be rendered. This lets you render different
+  # widgets for each filter, where you can customize the form control used (i.e.
+  # a text field vs a number field vs a select box).
   #
-  # If you don't specify a partial for a filter, it will try to infer it from
-  # the filter's class name. So, for example, a +TextFilter+ will try to render
-  # +filters/text_filter+ while a +SelectFilter+ will try to render
-  # +filters/select_filter+.
+  # By default, filters are rendered using a partial template named after the
+  # filter's class. For example, a +SelectFilter+ would be rendered in the
+  # +"filters/select_filter"+ partial. The partial receives a local named
+  # +filter+ with the filter object.
+  #
+  # Alternatively, you can pass a callable to +render_with+ that returns valid
+  # attributes for ActionView's +render+ method. This could be a Hash (i.e. to
+  # +render+ a custom partial with extra options) or it could be an object that
+  # responds to +render_in+.
+  #
+  # Finally, you can just pass a Class. If you do, DTB will insantiate it with a
+  # +filter+ keyword, and return the instance. This is useful when using
+  # component libraries such as ViewComponent or Phlex.
+  #
+  #   class SelectFilter < DTB::Filter
+  #     option :render_with, default: SelectFilterComponent
+  #   end
+  #
+  # == Passing extra options to the renderer
+  #
+  # Whatever options you pass to the {#renderer} method, they will be
+  # forwarded to the configured renderer via {#render_with}. For example,
+  # given:
+  #
+  #   class SelectFilter < DTB::Filter
+  #     option :render_with, default: SelectFilterComponent
+  #   end
+  #
+  # The following two statements are equivalent
+  #
+  #   <%= render filter.renderer(class: "custom-class") %>
+  #   <%= render SelectFilterComponent.new(filter: filter, class: "custom-class") %>
+  #
+  # == Overriding the options passed to the renderer
+  #
+  # The default options passed to the rendered are the return value of the
+  # {#rendering_options} method. You can always override it to customize how the
+  # object is passed to the renderer, or to pass other options that you always
+  # need to include (rather than passing them on every {#renderer}) invocation.
+  #
+  # @example Overriding the rendering options
+  #   class AutocompleteFilter < DTB::Filter
+  #     option :render_with, default: AutocompleteFilterComponent
+  #
+  #     def rendering_options
+  #       # super here returns `{filter: self}`
+  #       {url: autocomplete_url}.update(super)
+  #     end
+  #   end
   #
   # @see HasFilters
   class Filter < QueryBuilder
     include HasOptions
+    include Renderable
 
     # @!group Options
 
@@ -107,10 +154,13 @@ module DTB
     #     value used as the default.
     option :default
 
-    # @!attribute [rw] partial
-    #   @return [String, nil] a custom partial to use when rendering the filter.
-    #     Defaults to the filter's class name, underscored.
-    option :partial
+    # @!attribute [rw] render_with
+    #   @see Renderable#render_with
+    option :render_with,
+      default: ->(filter:, **opts) {
+        {partial: "filters/#{filter.class.name.underscore}", locals: {filter: filter, **opts}}
+      },
+      required: true
 
     # @!endgroup
 
@@ -155,19 +205,13 @@ module DTB
       i18n_lookup(:placeholders, default: "")
     end
 
-    # Determine the partial to be used when rendering this filter. If the
-    # +partial+ option is set, that is used. If not, this will infer the partial
-    # should be based on the name of the class, such that FooFilter tries to
-    # render +filters/foo_filter+.
-    #
-    # @return [String]
-    def to_partial_path
-      options.fetch(:partial, "filters/#{self.class.name.underscore}")
-    end
-
-    # @visibility private
+    # @api private
     def evaluate?
       value.present? && super
+    end
+
+    private def rendering_options
+      {filter: self}
     end
 
     private def default_value

@@ -20,7 +20,7 @@ class DTB::HasFiltersTest < Minitest::Test
 
     filter :qux,
       ->(scope, val) { scope << val << internal_state },
-      partial: "filters/super_special"
+      render_with: "filters/super_special"
 
     def run
       filters.call([])
@@ -38,25 +38,25 @@ class DTB::HasFiltersTest < Minitest::Test
     assert_kind_of DTB::Filter, foo
     assert_equal :foo, foo.name
     assert_nil foo.value
-    assert_equal "filters/dtb/filter", foo.to_partial_path
+    assert_equal({partial: "filters/dtb/filter", locals: {filter: foo}}, foo.renderer)
 
     bar = object.filters[:bar]
     assert_kind_of TestFilter, bar
     assert_equal :bar, bar.name
     assert_equal :bar_default, bar.value
-    assert_equal "filters/test_filter", bar.to_partial_path
+    assert_equal({partial: "filters/test_filter", locals: {filter: bar}}, bar.renderer)
 
     baz = object.filters[:baz]
     assert_kind_of DTB::Filter, baz
     assert_equal :baz, baz.name
     assert_nil baz.value
-    assert_equal "filters/dtb/filter", baz.to_partial_path
+    assert_equal({partial: "filters/dtb/filter", locals: {filter: baz}}, baz.renderer)
 
     qux = object.filters[:qux]
     assert_kind_of DTB::Filter, qux
     assert_equal :qux, qux.name
     assert_nil qux.value
-    assert_equal "filters/super_special", qux.to_partial_path
+    assert_equal({partial: "filters/super_special", locals: {filter: qux}}, qux.renderer)
   end
 
   def test_expects_params_in_initializer
@@ -93,10 +93,16 @@ class DTB::HasFiltersTest < Minitest::Test
 
   def test_can_override_partial
     object = TestClass.new({})
-    assert_equal "filters/filters", object.filters.to_partial_path
+    assert_equal(
+      {partial: "filters/filters", locals: {filters: object.filters}},
+      object.filters.renderer
+    )
 
-    overridden = TestClass.new({}, filters: {partial: "filters/horizontal"})
-    assert_equal "filters/horizontal", overridden.filters.to_partial_path
+    overridden = TestClass.new({}, filters: {render_with: "filters/horizontal"})
+    assert_equal(
+      {partial: "filters/horizontal", locals: {filters: overridden.filters}},
+      overridden.filters.renderer
+    )
   end
 
   def test_to_data_table_includes_filters

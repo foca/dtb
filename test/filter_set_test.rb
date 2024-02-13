@@ -11,12 +11,18 @@ class DTB::FilterSetTest < Minitest::Test
     assert_equal :f, overridden.namespace
   end
 
-  def test_determins_its_partial_path
+  def test_determins_its_rendering_options
     filters = DTB::FilterSet.new([])
-    assert_equal "filters/filters", filters.to_partial_path
+    assert_equal(
+      {partial: "filters/filters", locals: {filters: filters}},
+      filters.renderer
+    )
 
-    overridden = DTB::FilterSet.new([], partial: "filters/horizontal")
-    assert_equal "filters/horizontal", overridden.to_partial_path
+    overridden = DTB::FilterSet.new([], render_with: "filters/horizontal")
+    assert_equal(
+      {partial: "filters/horizontal", locals: {filters: overridden}},
+      overridden.renderer
+    )
   end
 
   def test_accepts_urls_for_submit_and_reset

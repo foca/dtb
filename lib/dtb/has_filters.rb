@@ -58,7 +58,7 @@ module DTB
       #   filter :name,
       #     type: ContainsTextFilter
       #
-      # @example Overriding the partial used for a specific filter
+      # @example Overriding the renderer used for a specific filter
       #   # Instead of rendering "filters/contains_text_filter", this would
       #   # render "example/partial" in the filters form.
       #   filter :name,
