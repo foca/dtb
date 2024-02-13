@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    dtb (0.1.0)
+    dtb (1.0.0.rc1)
       activemodel (>= 4.2, < 8.0)
       activesupport (>= 4.2, < 8.0)
       i18n
