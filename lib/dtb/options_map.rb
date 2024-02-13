@@ -42,14 +42,14 @@ module DTB
     # @return [Set] The options defined as required.
     attr_reader :required_keys
 
-    def initialize(*)
+    def initialize(*) # :nodoc:
       super
       @valid_keys = Set.new
       @required_keys = Set.new
       @nested_options = {}
     end
 
-    def initialize_copy(other)
+    def initialize_copy(other) # :nodoc:
       super
       @valid_keys = other.valid_keys.dup
       @required_keys = other.required_keys.dup

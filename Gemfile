@@ -6,10 +6,10 @@ source "https://rubygems.org"
 gemspec
 
 # Development/test gems.
-gem "byebug"
-gem "rake", "~> 13.0"
-gem "minitest", "~> 5.0"
-gem "standard", "~> 1.1"
+gem "debug"
+gem "rake"
+gem "minitest"
+gem "standard"
 
 # Documentation gems.
 gem "yard"

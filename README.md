@@ -7,8 +7,8 @@ queries and turn them into easy to render datatables using Rails.
 
 Add this line to your application's Gemfile:
 
-```ruby
-gem 'dtb'
+```
+gem "dtb"
 ```
 
 And then execute:
@@ -39,7 +39,7 @@ expected to adhere to the [code of conduct][].
 
 ## Code of Conduct
 
-Everyone interacting in the Dtb project's codebases, issue trackers, chat rooms
+Everyone interacting in the DTB project's codebases, issue trackers, chat rooms
 and mailing lists is expected to follow the [code of conduct][].
 
 [repo]: https://github.com/foca/dtb
