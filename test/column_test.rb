@@ -75,4 +75,34 @@ class DTB::ColumnTest < Minitest::Test
     bar = DTB::Column.new(:bar, context: context)
     assert_equal "Base Bar", bar.header
   end
+
+  def test_rendering
+    column = DTB::Column.new(:value) { |scope| scope }
+    assert_nil column.renderer
+
+    column = DTB::Column.new(:value, render_with: "column") { |scope| scope }
+    assert_equal(
+      {partial: "column", locals: {column: column}},
+      column.renderer
+    )
+    assert_equal(
+      {partial: "column", locals: {column: column, foo: :bar}},
+      column.renderer(foo: :bar)
+    )
+
+    component_class = Struct.new(:column, :foo, keyword_init: true)
+    column = DTB::Column.new(:value, render_with: component_class) { |scope| scope }
+
+    renderer = column.renderer
+    assert_instance_of component_class, renderer
+    assert_equal column, renderer.column
+
+    renderer_with_options = column.renderer(foo: :bar)
+    assert_instance_of component_class, renderer_with_options
+    assert_equal column, renderer_with_options.column
+    assert_equal :bar, renderer_with_options.foo
+
+    column = DTB::Column.new(:value, render_with: ->(column:) { [:render, column] }) { |scope| scope }
+    assert_equal [:render, column], column.renderer
+  end
 end
