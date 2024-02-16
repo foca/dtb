@@ -65,8 +65,8 @@ module DTB
   #   class ApplicationQuery < DTB::Query
   #     attr_reader :current_user
   #
-  #     def initialize(current_user, *args)
-  #       super(*args)
+  #     def initialize(current_user, ...)
+  #       super(...)
   #       @current_user = current_user
   #     end
   #   end
