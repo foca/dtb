@@ -254,7 +254,7 @@ And then, on `app/views/products/_product.html.erb`:
 ``` erb
 <tr>
   <% columns.each do |column| %>
-    <td><%= product.public_send(column.name) %></td>
+    <td><%= column.value_for(product) %></td>
   <% end %>
 </tr>
 ```
@@ -307,6 +307,36 @@ separately:
     <%= render column.renderer(row: row) %>
   <% end %>
 </tr>
+```
+
+#### Extracting values for a column/row pair
+
+You can use the `Column#value_for(row)` method to extract the value for a column
+given a row. For example, in your column renderer, you might do
+
+``` erb
+<td>
+  <%= column.value_for(row) %>
+</td>
+```
+
+The behavior of `#value_for` is controlled by the Column's `accessor` option. By
+default, it will try to `public_send` the column's `name` to the row object.
+
+``` ruby
+class ProductsQuery < ApplicationQuery
+  # In this case, `column.value_for(row)` is equivalent to `row.name`
+  column :name
+
+  # Here, we're assuming the model defines a `#price` method (e.g. via
+  # `composed_of` that returns something that's better to display than
+  # the number of cents)
+  column :price_in_cents, accessor: :price
+
+  # By using a Proc as the accessor, we can do more advanced formatting of the
+  # value, without having to do anything special when rendering the cell.
+  column :purchases_count, accessor: ->(row) { "purchase".pluralize(row.purchases_count) }
+end
 ```
 
 ### Internationalization

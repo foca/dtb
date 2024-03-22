@@ -78,6 +78,25 @@ class DTB::ColumnTest < Minitest::Test
     assert_equal "Base Bar", bar.header
   end
 
+  def test_accesor
+    row = Struct.new(:value).new(42)
+
+    as_proc = DTB::Column.new(:value, accessor: ->(row) { row.value })
+    assert_equal 42, as_proc.value_for(row)
+
+    as_symbol = DTB::Column.new(:value, accessor: :value)
+    assert_equal 42, as_symbol.value_for(row)
+
+    as_string = DTB::Column.new(:value, accessor: "value")
+    assert_equal 42, as_string.value_for(row)
+
+    default = DTB::Column.new(:value)
+    assert_equal 42, default.value_for(row)
+
+    default_when_not_database = DTB::Column.new(:value, database: false)
+    assert_nil default_when_not_database.value_for(row)
+  end
+
   def test_rendering
     column = DTB::Column.new(:value) { |scope| scope }
     assert_nil column.renderer

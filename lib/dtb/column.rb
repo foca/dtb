@@ -51,6 +51,13 @@ module DTB
     #   at the end of each row, or a checkbox at the start.
     option :database, default: true, required: true
 
+    # @!attribute [rw] accessor
+    #   The accessor to use to extract the value for this column for a given
+    #   row. Accepts a Symbol, String, or Proc. If given a Symbol or String, it
+    #   will attempt to call that method on the row object. If given a Proc, it
+    #   will call the Proc with the row object as its argument.
+    option :accessor, default: ->(row) { row.public_send(name) if database? }
+
     # @!endgroup
 
     # Looks up the column's header in the i18n sources. If the column is
@@ -71,6 +78,16 @@ module DTB
     # @return [String]
     def header
       i18n_lookup(:columns, default: "")
+    end
+
+    # Extracts the value from the row using what you've configured as an
+    # {#accessor}.
+    def value_for(row)
+      if options[:accessor].respond_to?(:to_proc)
+        instance_exec(row, &options[:accessor].to_proc)
+      elsif options[:accessor].respond_to?(:to_sym) && row.respond_to?(options[:accessor].to_sym)
+        row.public_send(options[:accessor].to_sym)
+      end
     end
 
     # @return [Boolean] whether this column actually affects the query or not.
